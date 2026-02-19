@@ -1,0 +1,61 @@
+{% extends 'events/base.html' %}
+
+{% block title %}Categories - Event Management System{% endblock %}
+
+{% block content %}
+<div class="mb-8">
+    <div class="flex justify-between items-center">
+        <div>
+            <h1 class="text-3xl font-bold text-gray-800">Categories</h1>
+            <p class="text-gray-600 mt-2">Manage event categories</p>
+        </div>
+        <a href="{% url 'category_create' %}" class="bg-blue-600 hover:bg-blue-700 text-white font-medium py-2 px-6 rounded-lg transition-colors">
+            + Create Category
+        </a>
+    </div>
+</div>
+
+{% if categories %}
+<div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+    {% for category in categories %}
+    <div class="bg-white rounded-lg shadow-md p-6 hover:shadow-lg transition-shadow">
+        <div class="flex justify-between items-start mb-3">
+            <h2 class="text-xl font-bold text-gray-800">{{ category.name }}</h2>
+            <span class="inline-flex items-center px-3 py-1 rounded-full text-sm font-medium bg-blue-100 text-blue-800">
+                {{ category.event_count }} Event{{ category.event_count|pluralize }}
+            </span>
+        </div>
+        
+        {% if category.description %}
+        <p class="text-gray-600 text-sm mb-4">{{ category.description }}</p>
+        {% else %}
+        <p class="text-gray-400 text-sm italic mb-4">No description</p>
+        {% endif %}
+        
+        <div class="flex gap-2">
+            <a href="{% url 'event_list' %}?category={{ category.id }}" class="flex-1 text-center bg-blue-600 hover:bg-blue-700 text-white py-2 px-4 rounded-lg transition-colors text-sm font-medium">
+                View Events
+            </a>
+            <a href="{% url 'category_update' category.pk %}" class="bg-gray-200 hover:bg-gray-300 text-gray-800 py-2 px-4 rounded-lg transition-colors text-sm font-medium">
+                Edit
+            </a>
+            <a href="{% url 'category_delete' category.pk %}" class="bg-red-100 hover:bg-red-200 text-red-800 py-2 px-4 rounded-lg transition-colors text-sm font-medium">
+                Delete
+            </a>
+        </div>
+    </div>
+    {% endfor %}
+</div>
+{% else %}
+<div class="bg-white rounded-lg shadow-md p-12 text-center">
+    <svg class="mx-auto h-16 w-16 text-gray-400 mb-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 7h.01M7 3h5c.512 0 1.024.195 1.414.586l7 7a2 2 0 010 2.828l-7 7a2 2 0 01-2.828 0l-7-7A1.994 1.994 0 013 12V7a4 4 0 014-4z"></path>
+    </svg>
+    <h3 class="text-xl font-semibold text-gray-800 mb-2">No Categories Yet</h3>
+    <p class="text-gray-600 mb-4">Get started by creating your first category.</p>
+    <a href="{% url 'category_create' %}" class="inline-block bg-blue-600 hover:bg-blue-700 text-white font-medium py-2 px-6 rounded-lg transition-colors">
+        Create First Category
+    </a>
+</div>
+{% endif %}
+{% endblock %}
