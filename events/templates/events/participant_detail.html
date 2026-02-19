@@ -1,0 +1,116 @@
+{% extends 'events/base.html' %}
+
+{% block title %}{{ participant.name }} - Event Management System{% endblock %}
+
+{% block content %}
+<div class="mb-8">
+    <a href="{% url 'participant_list' %}" class="text-blue-600 hover:text-blue-800 inline-flex items-center mb-4">
+        <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"></path>
+        </svg>
+        Back to Participants
+    </a>
+    
+    <div class="flex justify-between items-start">
+        <div>
+            <h1 class="text-3xl font-bold text-gray-800">{{ participant.name }}</h1>
+            <p class="text-gray-600 mt-2">{{ participant.email }}</p>
+        </div>
+        <div class="flex gap-2">
+            <a href="{% url 'participant_update' participant.pk %}" class="bg-blue-600 hover:bg-blue-700 text-white font-medium py-2 px-6 rounded-lg transition-colors">
+                Edit Participant
+            </a>
+            <a href="{% url 'participant_delete' participant.pk %}" class="bg-red-600 hover:bg-red-700 text-white font-medium py-2 px-6 rounded-lg transition-colors">
+                Delete
+            </a>
+        </div>
+    </div>
+</div>
+
+<div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
+    <!-- Participant Info -->
+    <div class="lg:col-span-1">
+        <div class="bg-white rounded-lg shadow-md p-6">
+            <h2 class="text-xl font-bold text-gray-800 mb-4">Participant Information</h2>
+            
+            <div class="space-y-4">
+                <div>
+                    <h3 class="text-sm font-medium text-gray-600 mb-1">Name</h3>
+                    <p class="text-gray-800">{{ participant.name }}</p>
+                </div>
+                
+                <div>
+                    <h3 class="text-sm font-medium text-gray-600 mb-1">Email</h3>
+                    <p class="text-gray-800">{{ participant.email }}</p>
+                </div>
+                
+                <div>
+                    <h3 class="text-sm font-medium text-gray-600 mb-1">Total Events</h3>
+                    <p class="text-2xl font-bold text-blue-600">{{ participant.events.count }}</p>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Events List -->
+    <div class="lg:col-span-2">
+        <div class="bg-white rounded-lg shadow-md p-6">
+            <h2 class="text-xl font-bold text-gray-800 mb-4">Registered Events</h2>
+            
+            {% if participant.events.all %}
+            <div class="space-y-4">
+                {% for event in participant.events.all %}
+                <div class="border border-gray-200 rounded-lg p-4 hover:shadow-md transition-shadow">
+                    <div class="flex justify-between items-start">
+                        <div class="flex-1">
+                            <h3 class="text-lg font-semibold text-gray-800 mb-2">{{ event.name }}</h3>
+                            <p class="text-gray-600 text-sm mb-3">{{ event.description|truncatewords:20 }}</p>
+                            
+                            <div class="grid grid-cols-1 md:grid-cols-2 gap-2 text-sm text-gray-600">
+                                <div class="flex items-center">
+                                    <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"></path>
+                                    </svg>
+                                    {{ event.date }}
+                                </div>
+                                
+                                <div class="flex items-center">
+                                    <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                                    </svg>
+                                    {{ event.time }}
+                                </div>
+                                
+                                <div class="flex items-center">
+                                    <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"></path>
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"></path>
+                                    </svg>
+                                    {{ event.location }}
+                                </div>
+                                
+                                <div>
+                                    <span class="inline-block bg-blue-100 text-blue-800 text-xs px-2 py-1 rounded">{{ event.category.name }}</span>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <a href="{% url 'event_detail' event.pk %}" class="ml-4 text-blue-600 hover:text-blue-800 font-medium text-sm whitespace-nowrap">
+                            View Event →
+                        </a>
+                    </div>
+                </div>
+                {% endfor %}
+            </div>
+            {% else %}
+            <div class="text-center py-8">
+                <svg class="mx-auto h-12 w-12 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"></path>
+                </svg>
+                <p class="text-gray-600 mt-2">Not registered for any events yet</p>
+            </div>
+            {% endif %}
+        </div>
+    </div>
+</div>
+{% endblock %}

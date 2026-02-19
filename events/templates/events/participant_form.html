@@ -1,0 +1,72 @@
+{% extends 'events/base.html' %}
+
+{% block title %}{{ action }} Participant - Event Management System{% endblock %}
+
+{% block content %}
+<div class="mb-8">
+    <a href="{% url 'participant_list' %}" class="text-blue-600 hover:text-blue-800 inline-flex items-center mb-4">
+        <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"></path>
+        </svg>
+        Back to Participants
+    </a>
+    
+    <h1 class="text-3xl font-bold text-gray-800">{{ action }} Participant</h1>
+</div>
+
+<div class="max-w-2xl">
+    <div class="bg-white rounded-lg shadow-md p-6">
+        <form method="post" class="space-y-6">
+            {% csrf_token %}
+            
+            {% if form.non_field_errors %}
+            <div class="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded">
+                {{ form.non_field_errors }}
+            </div>
+            {% endif %}
+            
+            <div>
+                <label for="{{ form.name.id_for_label }}" class="block text-sm font-medium text-gray-700 mb-2">
+                    Name <span class="text-red-500">*</span>
+                </label>
+                {{ form.name }}
+                {% if form.name.errors %}
+                <p class="mt-1 text-sm text-red-600">{{ form.name.errors.0 }}</p>
+                {% endif %}
+            </div>
+            
+            <div>
+                <label for="{{ form.email.id_for_label }}" class="block text-sm font-medium text-gray-700 mb-2">
+                    Email <span class="text-red-500">*</span>
+                </label>
+                {{ form.email }}
+                {% if form.email.errors %}
+                <p class="mt-1 text-sm text-red-600">{{ form.email.errors.0 }}</p>
+                {% endif %}
+            </div>
+            
+            <div>
+                <label class="block text-sm font-medium text-gray-700 mb-2">
+                    Events
+                </label>
+                <div class="border border-gray-300 rounded-lg p-4 max-h-60 overflow-y-auto bg-gray-50">
+                    {{ form.events }}
+                </div>
+                {% if form.events.errors %}
+                <p class="mt-1 text-sm text-red-600">{{ form.events.errors.0 }}</p>
+                {% endif %}
+                <p class="mt-1 text-sm text-gray-600">Select events this participant will attend</p>
+            </div>
+            
+            <div class="flex gap-4">
+                <button type="submit" class="bg-blue-600 hover:bg-blue-700 text-white font-medium py-2 px-6 rounded-lg transition-colors">
+                    {{ action }} Participant
+                </button>
+                <a href="{% url 'participant_list' %}" class="bg-gray-200 hover:bg-gray-300 text-gray-800 font-medium py-2 px-6 rounded-lg transition-colors">
+                    Cancel
+                </a>
+            </div>
+        </form>
+    </div>
+</div>
+{% endblock %}

@@ -1,0 +1,126 @@
+{% extends 'events/base.html' %}
+
+{% block title %}Dashboard - Event Management System{% endblock %}
+
+{% block content %}
+<div class="mb-8">
+    <h1 class="text-3xl font-bold text-gray-800">Dashboard</h1>
+    <p class="text-gray-600 mt-2">Welcome to the Event Management System</p>
+</div>
+
+<!-- Stats Grid -->
+<div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
+    <!-- Total Participants Card -->
+    <div class="bg-white rounded-lg shadow-md p-6 border-l-4 border-blue-500">
+        <div class="flex items-center justify-between">
+            <div>
+                <p class="text-gray-600 text-sm font-medium">Total Participants</p>
+                <p class="text-3xl font-bold text-gray-800 mt-2">{{ total_participants }}</p>
+            </div>
+            <div class="bg-blue-100 rounded-full p-3">
+                <svg class="w-8 h-8 text-blue-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z"></path>
+                </svg>
+            </div>
+        </div>
+    </div>
+
+    <!-- Total Events Card (Clickable) -->
+    <a href="{% url 'event_list' %}" class="bg-white rounded-lg shadow-md p-6 border-l-4 border-green-500 hover:shadow-lg transition-shadow">
+        <div class="flex items-center justify-between">
+            <div>
+                <p class="text-gray-600 text-sm font-medium">Total Events</p>
+                <p class="text-3xl font-bold text-gray-800 mt-2">{{ total_events }}</p>
+            </div>
+            <div class="bg-green-100 rounded-full p-3">
+                <svg class="w-8 h-8 text-green-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"></path>
+                </svg>
+            </div>
+        </div>
+    </a>
+
+    <!-- Upcoming Events Card (Clickable) -->
+    <a href="{% url 'event_list' %}?filter=upcoming" class="bg-white rounded-lg shadow-md p-6 border-l-4 border-yellow-500 hover:shadow-lg transition-shadow">
+        <div class="flex items-center justify-between">
+            <div>
+                <p class="text-gray-600 text-sm font-medium">Upcoming Events</p>
+                <p class="text-3xl font-bold text-gray-800 mt-2">{{ upcoming_events_count }}</p>
+            </div>
+            <div class="bg-yellow-100 rounded-full p-3">
+                <svg class="w-8 h-8 text-yellow-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                </svg>
+            </div>
+        </div>
+    </a>
+
+    <!-- Past Events Card (Clickable) -->
+    <a href="{% url 'event_list' %}?filter=past" class="bg-white rounded-lg shadow-md p-6 border-l-4 border-red-500 hover:shadow-lg transition-shadow">
+        <div class="flex items-center justify-between">
+            <div>
+                <p class="text-gray-600 text-sm font-medium">Past Events</p>
+                <p class="text-3xl font-bold text-gray-800 mt-2">{{ past_events_count }}</p>
+            </div>
+            <div class="bg-red-100 rounded-full p-3">
+                <svg class="w-8 h-8 text-red-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                </svg>
+            </div>
+        </div>
+    </a>
+</div>
+
+<!-- Today's Events Section -->
+<div class="bg-white rounded-lg shadow-md p-6">
+    <h2 class="text-2xl font-bold text-gray-800 mb-4">Today's Events</h2>
+    
+    {% if todays_events %}
+    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+        {% for event in todays_events %}
+        <div class="border border-gray-200 rounded-lg p-4 hover:shadow-md transition-shadow">
+            <h3 class="text-lg font-semibold text-gray-800 mb-2">{{ event.name }}</h3>
+            <p class="text-gray-600 text-sm mb-2">{{ event.description|truncatewords:15 }}</p>
+            <div class="flex items-center text-sm text-gray-500 mb-1">
+                <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                </svg>
+                {{ event.time }}
+            </div>
+            <div class="flex items-center text-sm text-gray-500 mb-1">
+                <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"></path>
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"></path>
+                </svg>
+                {{ event.location }}
+            </div>
+            <div class="flex items-center justify-between mt-3">
+                <span class="inline-block bg-blue-100 text-blue-800 text-xs px-2 py-1 rounded">{{ event.category.name }}</span>
+                <a href="{% url 'event_detail' event.pk %}" class="text-blue-600 hover:text-blue-800 text-sm font-medium">View Details →</a>
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+    {% else %}
+    <div class="text-center py-8">
+        <svg class="mx-auto h-12 w-12 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"></path>
+        </svg>
+        <p class="mt-2 text-gray-600">No events scheduled for today.</p>
+    </div>
+    {% endif %}
+</div>
+
+<!-- Quick Actions -->
+<div class="mt-8 grid grid-cols-1 md:grid-cols-3 gap-4">
+    <a href="{% url 'event_create' %}" class="bg-blue-600 hover:bg-blue-700 text-white font-medium py-3 px-6 rounded-lg text-center transition-colors">
+        + Create New Event
+    </a>
+    <a href="{% url 'participant_create' %}" class="bg-green-600 hover:bg-green-700 text-white font-medium py-3 px-6 rounded-lg text-center transition-colors">
+        + Add Participant
+    </a>
+    <a href="{% url 'category_create' %}" class="bg-purple-600 hover:bg-purple-700 text-white font-medium py-3 px-6 rounded-lg text-center transition-colors">
+        + Create Category
+    </a>
+</div>
+{% endblock %}
